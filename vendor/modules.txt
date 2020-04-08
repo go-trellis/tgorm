@@ -1,14 +1,12 @@
 # github.com/go-sql-driver/mysql v1.5.0
 github.com/go-sql-driver/mysql
-# github.com/go-trellis/algorithm v1.0.1
-github.com/go-trellis/algorithm/data-structures/stack
-github.com/go-trellis/algorithm/encryption/hash
-# github.com/go-trellis/common v1.3.1
+# github.com/go-trellis/common v1.6.1
+github.com/go-trellis/common/data-structures/stack
+github.com/go-trellis/common/encryption/hash
+github.com/go-trellis/common/errors
 github.com/go-trellis/common/formats
-# github.com/go-trellis/config v1.3.5
+# github.com/go-trellis/config v1.4.1
 github.com/go-trellis/config
-# github.com/go-trellis/errors v1.0.0
-github.com/go-trellis/errors
 # github.com/jinzhu/gorm v1.9.12
 github.com/jinzhu/gorm
 # github.com/jinzhu/inflection v1.0.0
@@ -19,5 +17,5 @@ golang.org/x/text/encoding/internal
 golang.org/x/text/encoding/internal/identifier
 golang.org/x/text/encoding/simplifiedchinese
 golang.org/x/text/transform
-# gopkg.in/yaml.v2 v2.2.7
+# gopkg.in/yaml.v2 v2.2.8
 gopkg.in/yaml.v2

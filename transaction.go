@@ -6,7 +6,7 @@ package tgorm
 import (
 	"strings"
 
-	"github.com/go-trellis/errors"
+	"github.com/go-trellis/common/errors"
 )
 
 func (p *TGorm) beginTransaction(name string) errors.ErrorCode {

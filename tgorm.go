@@ -6,7 +6,7 @@ package tgorm
 import (
 	"reflect"
 
-	"github.com/go-trellis/errors"
+	"github.com/go-trellis/common/errors"
 	"github.com/jinzhu/gorm"
 )
 

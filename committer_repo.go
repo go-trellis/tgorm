@@ -4,7 +4,7 @@
 package tgorm
 
 import (
-	"github.com/go-trellis/errors"
+	"github.com/go-trellis/common/errors"
 )
 
 // Committer Defination
