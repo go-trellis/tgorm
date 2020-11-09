@@ -3,13 +3,9 @@
 
 package tgorm
 
-import (
-	"github.com/go-trellis/common/errors"
-)
-
-func (p *TGorm) beginNonTransaction(name string) errors.ErrorCode {
+func (p *TGorm) beginNonTransaction(name string) error {
 	if p.isTransaction {
-		return ErrFailToConvetTXToNonTX.New()
+		return ErrFailToConvetTXToNonTX
 	}
 
 	_db, err := p.getDB(name)
@@ -22,16 +18,16 @@ func (p *TGorm) beginNonTransaction(name string) errors.ErrorCode {
 	return nil
 }
 
-func (p *TGorm) commitNonTransaction(txFunc interface{}, name string, repos ...interface{}) errors.ErrorCode {
+func (p *TGorm) commitNonTransaction(txFunc interface{}, name string, repos ...interface{}) error {
 	if p.isTransaction {
-		return ErrNonTransactionCantCommit.New()
+		return ErrNonTransactionCantCommit
 	}
 
 	_funcs := GetLogicFuncs(txFunc)
 
 	var (
 		_values []interface{}
-		errcode errors.ErrorCode
+		errcode error
 	)
 
 	if _funcs.BeforeLogic != nil {

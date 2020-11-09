@@ -14,8 +14,9 @@ import (
 var mapErrorTypes = map[reflect.Type]bool{
 	// 普通错误类型
 	reflect.TypeOf((*error)(nil)).Elem(): true,
-	// gogap错误类型
-	reflect.TypeOf((*errors.ErrorCode)(nil)).Elem(): true,
+	// go-trellis错误类型
+	reflect.TypeOf((*errors.SimpleError)(nil)).Elem(): true,
+	reflect.TypeOf((*error)(nil)).Elem():              true,
 }
 
 // AddErrorTypes 增加支持的错误类型
@@ -110,7 +111,7 @@ func GetLogicFuncs(fn interface{}) (funcs LogicFuncs) {
 }
 
 // CallFunc execute transaction function with logic functions and args
-func CallFunc(fn interface{}, funcs LogicFuncs, args []interface{}) ([]interface{}, errors.ErrorCode) {
+func CallFunc(fn interface{}, funcs LogicFuncs, args []interface{}) ([]interface{}, error) {
 	if fn == nil {
 		return nil, nil
 	}
@@ -123,7 +124,7 @@ func CallFunc(fn interface{}, funcs LogicFuncs, args []interface{}) ([]interface
 	case func(repos []interface{}) (err error):
 		{
 			if err := _logicFunc(args); err != nil {
-				return nil, ErrFailToExecuteLogicFunction.New(errors.Params{"message": err.Error()})
+				return nil, err
 			}
 			return nil, nil
 		}
@@ -133,7 +134,7 @@ func CallFunc(fn interface{}, funcs LogicFuncs, args []interface{}) ([]interface
 			if funcs.OnError != nil {
 				_, _ = call(funcs.OnError, err)
 			}
-			return nil, ErrFailToExecuteLogicFunction.New(errors.Params{"message": err.Error()})
+			return nil, err
 		}
 		return values, nil
 	}

@@ -3,20 +3,16 @@
 
 package tgorm
 
-import (
-	"github.com/go-trellis/common/errors"
-)
-
 // Committer Defination
 type Committer interface {
-	TX(fn interface{}, repos ...interface{}) errors.ErrorCode
-	TXWithName(fn interface{}, name string, repos ...interface{}) errors.ErrorCode
-	NonTX(fn interface{}, repos ...interface{}) errors.ErrorCode
-	NonTXWithName(fn interface{}, name string, repos ...interface{}) errors.ErrorCode
+	TX(fn interface{}, repos ...interface{}) error
+	TXWithName(fn interface{}, name string, repos ...interface{}) error
+	NonTX(fn interface{}, repos ...interface{}) error
+	NonTXWithName(fn interface{}, name string, repos ...interface{}) error
 }
 
 // TXFunc Transation function
-type TXFunc func(repos []interface{}) errors.ErrorCode
+type TXFunc func(repos []interface{}) error
 
 // Inheritor inherit function
 type Inheritor interface {

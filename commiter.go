@@ -3,10 +3,6 @@
 
 package tgorm
 
-import (
-	"github.com/go-trellis/common/errors"
-)
-
 // committer gorm committer
 type committer struct {
 	Name string
@@ -18,12 +14,12 @@ func NewCommitter() Committer {
 }
 
 // NonTX do non transaction function by default database
-func (p *committer) NonTX(fn interface{}, repos ...interface{}) errors.ErrorCode {
+func (p *committer) NonTX(fn interface{}, repos ...interface{}) error {
 	return p.NonTXWithName(fn, DefaultDatabase, repos...)
 }
 
 // NonTXWithName do non transaction function with name of database
-func (p *committer) NonTXWithName(fn interface{}, name string, repos ...interface{}) errors.ErrorCode {
+func (p *committer) NonTXWithName(fn interface{}, name string, repos ...interface{}) error {
 	if err := p.checkRepos(fn, repos); err != nil {
 		return err
 	}
@@ -34,7 +30,7 @@ func (p *committer) NonTXWithName(fn interface{}, name string, repos ...interfac
 	for _, origin := range repos {
 		repo := getRepo(origin)
 		if repo == nil {
-			return ErrStructCombineWithRepo.New(errors.Params{"name": "tgrom"})
+			return ErrStructCombineWithRepo
 		}
 
 		_newTgorm, _newRepoI, err := createNewTGorm(origin)
@@ -58,12 +54,12 @@ func (p *committer) NonTXWithName(fn interface{}, name string, repos ...interfac
 }
 
 // TX do transaction function by default database
-func (p *committer) TX(fn interface{}, repos ...interface{}) errors.ErrorCode {
+func (p *committer) TX(fn interface{}, repos ...interface{}) error {
 	return p.TXWithName(fn, DefaultDatabase, repos...)
 }
 
 // TXWithName do transaction function with name of database
-func (p *committer) TXWithName(fn interface{}, name string, repos ...interface{}) errors.ErrorCode {
+func (p *committer) TXWithName(fn interface{}, name string, repos ...interface{}) error {
 	if err := p.checkRepos(fn, repos); err != nil {
 		return err
 	}
@@ -75,7 +71,7 @@ func (p *committer) TXWithName(fn interface{}, name string, repos ...interface{}
 
 		repo := getRepo(origin)
 		if repo == nil {
-			return ErrStructCombineWithRepo.New(errors.Params{"name": "tgrom"})
+			return ErrStructCombineWithRepo
 		}
 
 		_newTgorm, _newRepoI, err := createNewTGorm(origin)
@@ -101,13 +97,13 @@ func (p *committer) TXWithName(fn interface{}, name string, repos ...interface{}
 	return _newTGormRepos[0].commitTransaction(fn, _newRepos...)
 }
 
-func (*committer) checkRepos(txFunc interface{}, originRepos ...interface{}) errors.ErrorCode {
+func (*committer) checkRepos(txFunc interface{}, originRepos ...interface{}) error {
 	if reposLen := len(originRepos); reposLen < 1 {
-		return ErrAtLeastOneRepo.New()
+		return ErrAtLeastOneRepo
 	}
 
 	if txFunc == nil {
-		return ErrNotFoundTransationFunction.New()
+		return ErrNotFoundTransationFunction
 	}
 	return nil
 }

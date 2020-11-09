@@ -3,13 +3,7 @@
 
 package tgorm
 
-import (
-	"strings"
-
-	"github.com/go-trellis/common/errors"
-)
-
-func (p *TGorm) beginTransaction(name string) errors.ErrorCode {
+func (p *TGorm) beginTransaction(name string) error {
 	if !p.isTransaction {
 		p.isTransaction = true
 		_db, err := p.getDB(name)
@@ -19,32 +13,27 @@ func (p *TGorm) beginTransaction(name string) errors.ErrorCode {
 		p.txSession = _db
 		return nil
 	}
-	return ErrTransactionIsAlreadyBegin.New(errors.Params{"name": name})
+	return ErrTransactionIsAlreadyBegin
 }
 
-func (p *TGorm) commitTransaction(txFunc interface{}, repos ...interface{}) errors.ErrorCode {
+func (p *TGorm) commitTransaction(txFunc interface{}, repos ...interface{}) error {
 	if !p.isTransaction {
-		return ErrNonTransactionCantCommit.New()
+		return ErrNonTransactionCantCommit
 	}
 
 	if p.txSession == nil {
-		return ErrTransactionSessionIsNil.New()
+		return ErrTransactionSessionIsNil
 	}
 
 	if txFunc == nil {
-		return ErrNotFoundTransationFunction.New()
+		return ErrNotFoundTransationFunction
 	}
 
 	_isNeedRollBack := true
 	p.txSession = p.txSession.Begin()
 
-	if errs := p.txSession.GetErrors(); 0 != len(errs) {
-		var errStrings []string
-		for _, err := range errs {
-			errStrings = append(errStrings, err.Error())
-		}
-		return ErrFailToCreateTransaction.New(
-			errors.Params{"message": strings.Join(errStrings, ";\n")})
+	if p.txSession.Error != nil {
+		return p.txSession.Error
 	}
 
 	defer func() {
@@ -57,7 +46,7 @@ func (p *TGorm) commitTransaction(txFunc interface{}, repos ...interface{}) erro
 
 	var (
 		values []interface{}
-		ecode  errors.ErrorCode
+		ecode  error
 	)
 
 	if _funcs.BeforeLogic != nil {
@@ -79,8 +68,8 @@ func (p *TGorm) commitTransaction(txFunc interface{}, repos ...interface{}) erro
 	}
 
 	_isNeedRollBack = false
-	if errs := p.txSession.Commit().GetErrors(); 0 != len(errs) {
-		return ErrFailToCommitTransaction.New().Append(errs)
+	if err := p.txSession.Commit().Error; err != nil {
+		return err
 	}
 
 	if _funcs.AfterCommit != nil {

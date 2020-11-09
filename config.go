@@ -4,11 +4,13 @@
 package tgorm
 
 import (
-	"fmt"
 	"sync"
 
+	"gorm.io/gorm/logger"
+
 	"github.com/go-trellis/config"
-	"github.com/jinzhu/gorm"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 var locker = &sync.Mutex{}
@@ -33,28 +35,29 @@ func NewDBsFromConfig(conf config.Config, name string) (map[string]*gorm.DB, err
 	cfg := conf.GetValuesConfig(name)
 
 	for _, databaseName := range cfg.GetKeys() {
-		fmt.Println("_db 0", databaseName)
-		_db, err := gorm.Open("mysql", GetMysqlDSNFromConfig(databaseName, cfg.GetValuesConfig(databaseName)))
+		logger.Default.LogMode(logger.LogLevel(cfg.GetInt(databaseName + ".log_level")))
+		_db, err := gorm.Open(mysql.New(mysql.Config{
+			DSN: GetMysqlDSNFromConfig(databaseName, cfg.GetValuesConfig(databaseName)),
+		}), &gorm.Config{
+			Logger: logger.Default,
+		})
 		if err != nil {
 			return nil, err
 		}
-		fmt.Println("_db 1", _db)
 
-		_db.DB().SetMaxIdleConns(cfg.GetInt(databaseName+".max_idle_conns", 10))
-
-		_db.DB().SetMaxOpenConns(cfg.GetInt(databaseName+".max_open_conns", 100))
-
-		_db.LogMode(cfg.GetBoolean(databaseName + ".show_sql"))
+		tempDB, err := _db.DB()
+		if err != nil {
+			return nil, err
+		}
+		tempDB.SetMaxIdleConns(cfg.GetInt(databaseName+".max_idle_conns", 10))
+		tempDB.SetMaxOpenConns(cfg.GetInt(databaseName+".max_open_conns", 100))
 
 		if _isD := cfg.GetBoolean(databaseName + ".is_default"); _isD {
 			dbs[DefaultDatabase] = _db
 		}
 
-		fmt.Println("_db 2", _db)
 		dbs[databaseName] = _db
 	}
-
-	fmt.Println(dbs)
 
 	return dbs, nil
 }

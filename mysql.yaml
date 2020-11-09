@@ -12,9 +12,9 @@ mysql:
     location: "Asia/Shanghai"       ## default "Local"
     parseTime: "True"               ## default "True"
     allow_native_passwords: "true"  ## default "true"
-    show_sql: true                  ## default false
     max_idle_conns: 10              ## default 10
     max_open_conns: 100             ## default 100
+    log_level: 1                    ## default LOG_DEBUG
     is_default: true                ## default false
     timeout: 5s                     ## default 5s
   ## simple mysql

@@ -1,21 +1,34 @@
 # github.com/go-sql-driver/mysql v1.5.0
 github.com/go-sql-driver/mysql
-# github.com/go-trellis/common v1.6.1
+# github.com/go-trellis/common v0.0.0-20201109093531-dd6cf5c3eb27
 github.com/go-trellis/common/data-structures/stack
 github.com/go-trellis/common/encryption/hash
 github.com/go-trellis/common/errors
+github.com/go-trellis/common/files
 github.com/go-trellis/common/formats
-# github.com/go-trellis/config v1.4.1
+# github.com/go-trellis/config v0.0.0-20201109094531-d08a44a0456a
 github.com/go-trellis/config
-# github.com/jinzhu/gorm v1.9.12
-github.com/jinzhu/gorm
+# github.com/google/uuid v1.1.2
+github.com/google/uuid
 # github.com/jinzhu/inflection v1.0.0
 github.com/jinzhu/inflection
-# golang.org/x/text v0.3.2
+# github.com/jinzhu/now v1.1.1
+github.com/jinzhu/now
+# golang.org/x/text v0.3.4
 golang.org/x/text/encoding
 golang.org/x/text/encoding/internal
 golang.org/x/text/encoding/internal/identifier
 golang.org/x/text/encoding/simplifiedchinese
 golang.org/x/text/transform
-# gopkg.in/yaml.v2 v2.2.8
+# gopkg.in/yaml.v2 v2.3.0
 gopkg.in/yaml.v2
+# gorm.io/driver/mysql v1.0.3
+gorm.io/driver/mysql
+# gorm.io/gorm v1.20.6
+gorm.io/gorm
+gorm.io/gorm/callbacks
+gorm.io/gorm/clause
+gorm.io/gorm/logger
+gorm.io/gorm/migrator
+gorm.io/gorm/schema
+gorm.io/gorm/utils

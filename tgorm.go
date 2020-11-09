@@ -6,8 +6,7 @@ package tgorm
 import (
 	"reflect"
 
-	"github.com/go-trellis/common/errors"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // TGorm trellis gorm
@@ -30,15 +29,15 @@ func (p *TGorm) SetDBs(dbs map[string]*gorm.DB) {
 		p.dbs = dbs
 		p.defaultDB = defDB
 	} else {
-		panic(ErrNotFoundDefaultDatabase.New())
+		panic(ErrNotFoundDefaultDatabase)
 	}
 }
 
-func (p *TGorm) getDB(name string) (*gorm.DB, errors.ErrorCode) {
+func (p *TGorm) getDB(name string) (*gorm.DB, error) {
 	if db, _exist := p.dbs[name]; _exist {
 		return db, nil
 	}
-	return nil, ErrNotFoundGormDB.New(errors.Params{"name": name})
+	return nil, ErrNotFoundGormDB
 }
 
 func getRepo(v interface{}) *TGorm {
@@ -49,10 +48,10 @@ func getRepo(v interface{}) *TGorm {
 	return nil
 }
 
-func createNewTGorm(origin interface{}) (*TGorm, interface{}, errors.ErrorCode) {
+func createNewTGorm(origin interface{}) (*TGorm, interface{}, error) {
 
 	if repo, err := Derive(origin); err != nil {
-		return nil, nil, ErrFailToDerive.New(errors.Params{"message": err.Error()})
+		return nil, nil, err
 	} else if repo != nil {
 		return getRepo(repo), repo, nil
 	}
@@ -60,18 +59,18 @@ func createNewTGorm(origin interface{}) (*TGorm, interface{}, errors.ErrorCode) 
 	newRepoV := reflect.New(reflect.ValueOf(
 		reflect.Indirect(reflect.ValueOf(origin)).Interface()).Type())
 	if !newRepoV.IsValid() {
-		return nil, nil, ErrFailToCreateRepo.New()
+		return nil, nil, ErrFailToCreateRepo
 	}
 
 	newRepoI := newRepoV.Interface()
 	newTgorm := getRepo(newRepoI)
 
 	if err := Inherit(newRepoI, origin); err != nil {
-		return nil, nil, ErrFailToInherit.New(errors.Params{"message": err.Error()})
+		return nil, nil, err
 	}
 
 	if newTgorm == nil {
-		return nil, nil, ErrFailToConvetTXToNonTX.New()
+		return nil, nil, ErrFailToConvetTXToNonTX
 	}
 	return newTgorm, newRepoI, nil
 }

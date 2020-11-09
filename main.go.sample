@@ -1,13 +1,10 @@
-// GNU GPL v3 License
-// Copyright (c) 2019 github.com:go-trellis
-
 // package main
 
 // import (
 // 	"fmt"
 
 // 	"github.com/go-trellis/tgorm"
-// 	"github.com/jinzhu/gorm"
+// 	"gorm.io/gorm"
 // )
 
 // var (
@@ -15,12 +12,12 @@
 // )
 
 // type Sample struct {
-// 	ID   string `gorm:"column:id"`
-// 	Name string `gorm:"column:Name"`
+// 	ID   string `gorm:"id"`
+// 	Name string `gorm:"name"`
 // }
 
 // func (*Sample) TableName() string {
-// 	return "t_km_servers"
+// 	return "test"
 // }
 
 // func main() {
@@ -32,7 +29,7 @@
 
 // 	db := dbs[tgorm.DefaultDatabase]
 // 	if db == nil {
-// 		panic(tgorm.ErrNotFoundGormDB.New())
+// 		panic(tgorm.ErrNotFoundGormDB)
 // 	}
 
 // 	var ss []Sample
