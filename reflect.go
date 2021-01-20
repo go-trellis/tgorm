@@ -1,5 +1,19 @@
-// GNU GPL v3 License
-// Copyright (c) 2019 github.com:go-trellis
+/*
+Copyright © 2019 Henry Huang <hhh@rutcode.com>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 
 package tgorm
 
@@ -7,16 +21,16 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/go-trellis/common/errors"
+	"github.com/iTrellis/common/errors"
 )
 
 // MapErrorTypes 可以支持的返回的错误类型
 var mapErrorTypes = map[reflect.Type]bool{
 	// 普通错误类型
 	reflect.TypeOf((*error)(nil)).Elem(): true,
-	// go-trellis错误类型
+	// iTrellis错误类型
 	reflect.TypeOf((*errors.SimpleError)(nil)).Elem(): true,
-	reflect.TypeOf((*error)(nil)).Elem():              true,
+	reflect.TypeOf((*errors.ErrorCode)(nil)).Elem():   true,
 }
 
 // AddErrorTypes 增加支持的错误类型

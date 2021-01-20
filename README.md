@@ -5,5 +5,5 @@
 
 ## database(mysql)
 
-* go get -v github.com/go-trellis/tgorm
+* go get -v github.com/iTrellis/tgorm
 * import [gorm.io/gorm](https://github.com/go-gorm/gorm)
